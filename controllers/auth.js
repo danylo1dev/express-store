@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-require("dotenv").config();
+
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
