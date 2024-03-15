@@ -1,4 +1,7 @@
 const path = require("path");
+const helmet = require("helmet");
+const compression = require("compression");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const express = require("express");
@@ -35,15 +38,8 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
+  const filter = ["image/png", "image/jpg", "image/jpeg"];
+  cb(null, filter.includes(file.mimetype));
 };
 
 app.set("view engine", "ejs");
@@ -53,6 +49,9 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
+app.use(helmet());
+app.use(compression());
+app.use(morgan("combined"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
@@ -112,7 +111,7 @@ app.use((req, res, next) => {
 mongoose
   .connect(MONGODB_URI)
   .then((result) => {
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((err) => {
     console.log(err);
