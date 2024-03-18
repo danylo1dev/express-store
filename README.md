@@ -12,7 +12,7 @@ I have learned MVC architecture and improved understanding of Express JS. Using 
 
 ---
 
-# Instaling
+# Installing
 
 ## Prerequisites
 
